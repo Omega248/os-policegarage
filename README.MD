@@ -1,17 +1,15 @@
-Npc model is Ped models more can be found here https://docs.fivem.net/docs/game-references/ped-models/
-If you change the NPC model to a female Ped model make sure you change line 46 in main.lua from
-npc = CreatePed(5, hash, coords, heading, false, false) to npc = CreatePed(4, hash, coords, heading, false, false)
+NPC model is the Ped model more can be found here https://docs.fivem.net/docs/game-references/ped-models/ If you change the NPC model to a female Ped model make sure you change line 46 in main.lua from NPC = CreatePed(5, hash, coords, heading, false, false) to NPC = CreatePed(4, hash, coords, heading, false, false)
 
-You will most likly need to change the vehicle spawncodes they have been marked in the main.lua
+You will most likely need to change the vehicle spawn codes they have been marked in the main.lua
 
-EXTRAS
-for Extras change SetVehicleExtra(veh, 1, 0)
+EXTRAS 
+for Extras change SetVehicleExtra(veh, 1, 0) 
 1 is the extra and 0 = true if you want to set the extra to false then change it to 1
 
-MODS
-    for the mods SetVehicleMod(veh, 1, 2, 3)
-    Veh = Vehicle You dont need to change this
-        1 = ModType 
+MODS 
+for the mods SetVehicleMod(veh, 1, 2, 3) 
+    Veh = Vehicle You dont need to change this 
+        1 = ModType
 
               Mod Types
             VMT_SPOILER = 0,
