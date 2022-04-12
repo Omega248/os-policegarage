@@ -1,3 +1,7 @@
+![image](https://user-images.githubusercontent.com/86800507/162882056-c555a49a-afdf-4594-9c2d-c24a5514be17.png)
+![image](https://user-images.githubusercontent.com/86800507/162882077-5d049856-6147-42dc-9e9d-0431c1f8ebef.png)
+
+
 NPC model is the Ped model more can be found here https://docs.fivem.net/docs/game-references/ped-models/ If you change the NPC model to a female Ped model make sure you change line 46 in main.lua from NPC = CreatePed(5, hash, coords, heading, false, false) to NPC = CreatePed(4, hash, coords, heading, false, false)
 
 You will most likely need to change the vehicle spawn codes they have been marked in the main.lua
