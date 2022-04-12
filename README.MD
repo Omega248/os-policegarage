@@ -1,4 +1,4 @@
-Just a simple Police garage for qbcore includes the ability to spawn the vehicles with the propper mods,extras and livierys
+Just a simple Police garage for qbcore includes the ability to spawn the vehicles with the proper mods, extras and liveries
 
 
 ![image](https://user-images.githubusercontent.com/86800507/162882056-c555a49a-afdf-4594-9c2d-c24a5514be17.png)
