@@ -7,7 +7,7 @@ Just a simple Police garage for qbcore includes the ability to spawn the vehicle
 
 NPC model is the Ped model more can be found here https://docs.fivem.net/docs/game-references/ped-models/ If you change the NPC model to a female Ped model make sure you change line 46 in main.lua from NPC = CreatePed(5, hash, coords, heading, false, false) to NPC = CreatePed(4, hash, coords, heading, false, false)
 
-You will most likely need to change the vehicle spawn codes they have been marked in the main.lua
+You will need to replace Model(ChangeMe) to your police car model in the main.lua
 
 EXTRAS 
 for Extras change SetVehicleExtra(veh, 1, 0) 
