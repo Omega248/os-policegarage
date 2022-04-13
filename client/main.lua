@@ -87,7 +87,7 @@ AddEventHandler('policegarage:lspd', function(pd)
     local vehicle = pd.vehicle
     local coords = { ['x'] = 451.08, ['y'] = -975.77, ['z'] = 25.5, ['h'] = 90.07 } --Change this to wherever you want to car to spawn
     QBCore.Functions.SpawnVehicle(vehicle, function(veh)
-        if vehicle == "npolvic" then --change this to your cvpi spawn code
+        if vehicle == "cvpi(ChangeMe)" then --change this to your cvpi spawn code
             SetVehicleNumberPlateText(veh, "LSPD"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -115,7 +115,7 @@ AddEventHandler('policegarage:lspd', function(pd)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             QBCore.Functions.Notify("You have chosen an LSPD CVPI")
-        elseif vehicle == "npolexp" then --change this to your explorer spawn code
+        elseif vehicle == "Explorer(ChangeMe)" then --change this to your explorer spawn code
             SetVehicleNumberPlateText(veh, "LSPD"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -143,7 +143,7 @@ AddEventHandler('policegarage:lspd', function(pd)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             QBCore.Functions.Notify("You have chosen an LSPD Explorer")
-        elseif vehicle == "npolchar" then --change this to your charger spawn code
+        elseif vehicle == "Charger(ChangeMe)" then --change this to your charger spawn code
             SetVehicleNumberPlateText(veh, "LSPD"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -180,7 +180,7 @@ AddEventHandler('policegarage:bcso', function(pd)
     local vehicle = pd.vehicle
     local coords = { ['x'] = 451.08, ['y'] = -975.77, ['z'] = 25.5, ['h'] = 90.07 } --Change this to wherever you want to car to spawn
     QBCore.Functions.SpawnVehicle(vehicle, function(veh)
-        if vehicle == "npolvic" then --change this to your cvpi spawn code
+        if vehicle == "cvpi(ChangeMe)" then --change this to your cvpi spawn code
             SetVehicleNumberPlateText(veh, "BCSO"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -208,7 +208,7 @@ AddEventHandler('policegarage:bcso', function(pd)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             QBCore.Functions.Notify("You have chosen a Blaine County CVPI")
-        elseif vehicle == "npolexp" then --change this to your explorer spawn code
+        elseif vehicle == "Explorer(ChangeMe)" then --change this to your explorer spawn code
             SetVehicleNumberPlateText(veh, "BCSO"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -236,7 +236,7 @@ AddEventHandler('policegarage:bcso', function(pd)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             QBCore.Functions.Notify("You have chosen a Blaine County Explorer")
-        elseif vehicle == "npolchar" then --change this to your charger spawn code
+        elseif vehicle == "Charger(ChangeMe)" then --change this to your charger spawn code
             SetVehicleNumberPlateText(veh, "BCSO"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -273,7 +273,7 @@ AddEventHandler('policegarage:sast', function(pd)
     local vehicle = pd.vehicle
     local coords = { ['x'] = 451.08, ['y'] = -975.77, ['z'] = 25.5, ['h'] = 90.07 } 
     QBCore.Functions.SpawnVehicle(vehicle, function(veh)
-        if vehicle == "npolvic" then --change this to your cvpi spawn code
+        if vehicle == "cvpi(ChangeMe)" then --change this to your cvpi spawn code
             SetVehicleNumberPlateText(veh, "SAST"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -301,7 +301,7 @@ AddEventHandler('policegarage:sast', function(pd)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             QBCore.Functions.Notify("You have chosen a State CVPI")
-        elseif vehicle == "npolexp" then --change this to your explorer spawn code
+        elseif vehicle == "Explorer(ChangeMe)" then --change this to your explorer spawn code
             SetVehicleNumberPlateText(veh, "SAST"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -329,7 +329,7 @@ AddEventHandler('policegarage:sast', function(pd)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             QBCore.Functions.Notify("You have chosen a State Explorer")
-        elseif vehicle == "npolchar" then --change this to your charger spawn code
+        elseif vehicle == "Charger(ChangeMe)" then --change this to your charger spawn code
             SetVehicleNumberPlateText(veh, "SAST"..tostring(math.random(1000, 9999)))
             exports['lj-fuel']:SetFuel(veh, 100.0)
             SetEntityHeading(veh, coords.h)
@@ -417,7 +417,7 @@ RegisterNetEvent('qb-menu:client:lspd', function(data)
             params = {
                 event = "policegarage:lspd",
                 args = {
-                    vehicle = 'npolvic', --change this to your cvpi spawn code
+                    vehicle = 'cvpi(ChangeMe)', --change this to your cvpi spawn code
                     
                 }
             }
@@ -428,7 +428,7 @@ RegisterNetEvent('qb-menu:client:lspd', function(data)
             params = {
                 event = "policegarage:lspd",
                 args = {
-                    vehicle = 'npolexp', --change this to your explorer spawn code
+                    vehicle = 'Explorer(ChangeMe)', --change this to your explorer spawn code
                     
                 }
             }
@@ -439,7 +439,7 @@ RegisterNetEvent('qb-menu:client:lspd', function(data)
         params = {
             event = "policegarage:lspd",
             args = {
-                vehicle = 'npolchar', --change this to your charger spawn code
+                vehicle = 'Charger(ChangeMe)', --change this to your charger spawn code
                 
             }
         }
@@ -462,7 +462,7 @@ RegisterNetEvent('qb-menu:client:bcso', function(data)
             params = {
                 event = "policegarage:bcso",
                 args = {
-                    vehicle = 'npolvic', --change this to your cvpi spawn code
+                    vehicle = 'cvpi(ChangeMe)', --change this to your cvpi spawn code
                     
                 }
             }
@@ -473,7 +473,7 @@ RegisterNetEvent('qb-menu:client:bcso', function(data)
             params = {
                 event = "policegarage:bcso",
                 args = {
-                    vehicle = 'npolexp', --change this to your explorer spawn code
+                    vehicle = 'Explorer(ChangeMe)', --change this to your explorer spawn code
                     
                 }
             }
@@ -484,7 +484,7 @@ RegisterNetEvent('qb-menu:client:bcso', function(data)
         params = {
             event = "policegarage:bcso",
             args = {
-                vehicle = 'npolchar', --change this to your charger spawn code
+                vehicle = 'Charger(ChangeMe)', --change this to your charger spawn code
                 
             }
         }
@@ -507,7 +507,7 @@ RegisterNetEvent('qb-menu:client:sast', function(data)
             params = {
                 event = "policegarage:sast",
                 args = {
-                    vehicle = 'npolvic', --change this to your cvpi spawn code
+                    vehicle = 'cvpi(ChangeMe)', --change this to your cvpi spawn code
                     
                 }
             }
@@ -518,7 +518,7 @@ RegisterNetEvent('qb-menu:client:sast', function(data)
             params = {
                 event = "policegarage:sast",
                 args = {
-                    vehicle = 'npolexp', --change this to your explorer spawn code
+                    vehicle = 'Explorer(ChangeMe)', --change this to your explorer spawn code
                     
                 }
             }
@@ -529,7 +529,7 @@ RegisterNetEvent('qb-menu:client:sast', function(data)
         params = {
             event = "policegarage:sast",
             args = {
-                vehicle = 'npolchar', --change this to your charger spawn code
+                vehicle = 'Charger(ChangeMe)', --change this to your charger spawn code
                 
             }
         }
@@ -547,12 +547,12 @@ RegisterNetEvent('qb-menu:client:interceptor', function(data)
             }
         },
         {
-            header = "Challanger",
-            txt = "Police Challanger",
+            header = "Challanger(ChangeMe)langer",
+            txt = "Police Challanger(ChangeMe)langer",
             params = {
                 event = "policegarage:sast",
                 args = {
-                    vehicle = 'npolchal',
+                    vehicle = 'Challanger(ChangeMe)',
                     
                 }
             }
@@ -563,7 +563,7 @@ RegisterNetEvent('qb-menu:client:interceptor', function(data)
             params = {
                 event = "policegarage:sast",
                 args = {
-                    vehicle = 'npolstang',
+                    vehicle = 'Mustang(ChangeMe)',
                     
                 }
             }
@@ -574,7 +574,7 @@ RegisterNetEvent('qb-menu:client:interceptor', function(data)
             params = {
                 event = "policegarage:sast",
                 args = {
-                    vehicle = 'npolvette',
+                    vehicle = 'corvette(ChangeMe)',
                     
                 }
             }
