@@ -1,657 +1,209 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+
+local garageLoopActive = false
 local PlayerData = {}
-local spawnped = false
+local myPed = nil
 
-
-RegisterNetEvent('QBCore:client:OnPlayerLoaded')
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function (Player)
-    PlayerData = QBCore.Functions.GetPlayerData()    
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    PlayerData = QBCore.Functions.GetPlayerData()
+    CheckAndStartGarageLoop()
 end)
 
-RegisterNetEvent('QBCore:Client:OnJobUpdate')
-AddEventHandler('QBCore:client:OnJobUpdate', function (job)
-    PlayerJob = job
+RegisterNetEvent('QBCore:Client:OnPlayerUnload', function()
+    PlayerData = {}
+    StopGarageLoop()
 end)
 
-exports['qb-target']:AddBoxZone("PoliceGarage", vector3(459.6, -986.6, 24.7), 0.65, 0.75, {
-	name = "PoliceGarage",
-	heading = 273.52,
-	debugPoly = false,
-	minZ = 24.57834,
-	maxZ = 26.57834,
-}, {
-	options = {
-		{
-            type = "client",
-            event = "garage:policemenu",
-			icon = "fa-solid fa-warehouse",
-			label = "Police Garage",
-			job = "police",
-		},
-	},
-	distance = 2.5
-})
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
+    PlayerData.job = JobInfo
+    CheckAndStartGarageLoop()
+end)
 
 Citizen.CreateThread(function()
-    while true do
+    while QBCore == nil or QBCore.Functions.GetPlayerData().job == nil do
         Citizen.Wait(1000)
-        for k, v in pairs(Config.Pedlocation) do
-            local pos = GetEntityCoords(PlayerPedId())
-            local dist = #(v.Cords - pos)
-            if dist < 40 and spawnped == false then
-                TriggerEvent('spawn:npc',v.Cords,v.h)
-                spawnped = true
-            end
-            if dist >= 35 then 
-                spawnped = false
-                DeletePed(npc)
-            end
-        end
     end
+
+    PlayerData = QBCore.Functions.GetPlayerData()
+    CheckAndStartGarageLoop()
 end)
 
-RegisterNetEvent('spawn:npc')
-AddEventHandler('spawn:npc', function(coords,heading)
-    local hash = GetHashKey(Config.NPCmodel)
-    if not HasModelLoaded(hash) then
-        RequestModel(hash)
-        Wait(150)
-    end
-    while not HasModelLoaded(hash) do
-        Wait(150)
-    end
-    spawnped = true
-    npc = CreatePed(5, hash, coords, heading, false, false)
-    FreezeEntityPosition(npc, true)
-    SetBlockingOfNonTemporaryEvents(npc, true)
-    SetEntityInvincible(npc, true)
-    loadAnimDict("amb@world_human_drug_dealer_hard@male@base")
-    while not TaskPlayAnim(npc, "amb@world_human_drug_dealer_hard@male@base", "base", 8.0, 1.0, -1, 17, 0, 0, 0) do
-    Wait(1000)
-    end  
-end)
-
-function loadAnimDict(dict)
-    while ( not HasAnimDictLoaded(dict)) do
-        RequestAnimDict( dict )
-        Citizen.Wait(5)
+function CheckAndStartGarageLoop()
+    if PlayerData.job and PlayerData.job.name == "police" then
+        StartGarageLoop()
+    else
+        StopGarageLoop()
     end
 end
 
-function closeMenuFull()
-    exports['qb-menu']:closeMenu()
+function StartGarageLoop()
+    if not garageLoopActive then
+        garageLoopActive = true
+        Citizen.CreateThread(function()
+            while garageLoopActive do
+                local playerPed = PlayerPedId()
+                local pos = GetEntityCoords(playerPed)
+                local dist = #(vector3(459.6, -986.6, 24.7) - pos)
+
+                if dist < 30 and not myPed then
+                    myPed = CreateMyPed()
+                    if myPed then
+                        for alpha = 0, 255, 51 do
+                            SetEntityAlpha(myPed, alpha, false)
+                            Citizen.Wait(50)
+                        end
+                    end
+                elseif dist >= 30 and myPed then
+                    for alpha = 255, 0, -51 do
+                        SetEntityAlpha(myPed, alpha, false)
+                        Citizen.Wait(50)
+                    end
+                    DeleteEntity(myPed)
+                    myPed = nil
+                end
+                Citizen.Wait(2500)
+            end
+        end)
+    end
 end
 
-RegisterNetEvent('policegarage:lspd')
-AddEventHandler('policegarage:lspd', function(pd)
-    local vehicle = pd.vehicle
-    local coords = { ['x'] = 451.08, ['y'] = -975.77, ['z'] = 25.5, ['h'] = 90.07 } --Change this to wherever you want to car to spawn
-    QBCore.Functions.SpawnVehicle(vehicle, function(veh)
-        if vehicle == "cvpi(ChangeMe)" then --change this to your cvpi spawn code
-            SetVehicleNumberPlateText(veh, "LSPD"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 1, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 0, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 111, 0)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen an LSPD CVPI")
-        elseif vehicle == "Explorer(ChangeMe)" then --change this to your explorer spawn code
-            SetVehicleNumberPlateText(veh, "LSPD"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 0, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 0, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 111, 0)
-            SetVehicleDashboardColour(veh, 0)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen an LSPD Explorer")
-        elseif vehicle == "Charger(ChangeMe)" then --change this to your charger spawn code
-            SetVehicleNumberPlateText(veh, "LSPD"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 1, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 0, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 111, 0)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen an LSPD Charger")
+function StopGarageLoop()
+    if garageLoopActive and myPed then
+        DeleteEntity(myPed)
+        myPed = nil
+    end
+    garageLoopActive = false
+end
+
+function CreateMyPed()
+    local model = Config.NPCmodel
+    local modelHash = GetHashKey(model)
+    RequestModel(modelHash)
+    local attempts = 0
+    local maxAttempts = 20
+    while not HasModelLoaded(modelHash) do
+        Citizen.Wait(10)
+        attempts = attempts + 1
+        if attempts >= maxAttempts then
+            print("Failed to load model.")
+            return nil
         end
-    end, coords, true)
+    end
+    local ped = CreatePed(4, modelHash, Config.NPClocation, false, true)
+    if ped then
+        TaskStartScenarioInPlace(ped, 'WORLD_HUMAN_CLIPBOARD', 0, true)
+        FreezeEntityPosition(ped, true)
+        SetEntityInvincible(ped, true)
+        SetBlockingOfNonTemporaryEvents(ped, true)
+        SetEntityAlpha(ped, 0, false)
+    end
+    return ped
+end
+
+RegisterNetEvent('policegarage:spawnVehicle')
+AddEventHandler('policegarage:spawnVehicle', function(data)
+    if not data or not data.vehicle then
+        QBCore.Functions.Notify("Vehicle data is missing!", "error")
+        return
+    end
+
+    if Config.RestrictVehicles then
+        local Rank = QBCore.Functions.GetPlayerData().job.grade.level
+        if data.vehicle.rank > Rank then 
+            QBCore.Functions.Notify("This vehicle is for a higher rank than you", "error")
+            return
+        end
+    end
+
+    local clearSpotFound, spawnPoint = false, nil
+    for _, location in ipairs(Config.VehSpawnLocations) do
+        if not IsAnyVehicleNearPoint(location.x, location.y, location.z, 2.5) then
+            clearSpotFound, spawnPoint = true, location
+            break
+        end
+    end
+
+    if not clearSpotFound then
+        QBCore.Functions.Notify("All spawn areas are full", "error")
+        return
+    end
+
+    QBCore.Functions.SpawnVehicle(data.vehicle.model, function(veh)
+        if not veh or not DoesEntityExist(veh) then
+            QBCore.Functions.Notify("Failed to spawn vehicle!", "error")
+            return
+        end
+
+        SetVehicleModKit(veh, 0)
+        for _, mod in ipairs(data.vehicle.mods) do
+            SetVehicleMod(veh, mod.id, mod.modenabled, false)
+        end
+        for _, extra in ipairs(data.vehicle.extras) do
+            SetVehicleExtra(veh, extra.id, extra.enabled)
+        end
+
+        SetVehicleLivery(veh, data.vehicle.livery)
+        local plateText = data.Department:upper() .. tostring(math.random(1000, 9999))
+        SetVehicleNumberPlateText(veh, plateText)
+        exports[Config.FuelSystem]:SetFuel(veh, 100.0)
+        SetVehicleDirtLevel(veh, 0.0)
+        SetVehicleColours(veh, data.vehicle.primarycolor, data.vehicle.secondarycolor)
+        SetVehicleDashboardColour(veh, 111)
+        SetVehicleExtraColours(veh, 0, 0)
+        TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
+        TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+        SetVehicleEngineOn(veh, true, true, false)
+    end, spawnPoint, true)
 end)
 
-RegisterNetEvent('policegarage:bcso')
-AddEventHandler('policegarage:bcso', function(pd)
-    local vehicle = pd.vehicle
-    local coords = { ['x'] = 451.08, ['y'] = -975.77, ['z'] = 25.5, ['h'] = 90.07 } --Change this to wherever you want to car to spawn
-    QBCore.Functions.SpawnVehicle(vehicle, function(veh)
-        if vehicle == "cvpi(ChangeMe)" then --change this to your cvpi spawn code
-            SetVehicleNumberPlateText(veh, "BCSO"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 1, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 2, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 111, 49)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen a Blaine County CVPI")
-        elseif vehicle == "Explorer(ChangeMe)" then --change this to your explorer spawn code
-            SetVehicleNumberPlateText(veh, "BCSO"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 0, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 2, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 111, 49)
-            SetVehicleDashboardColour(veh, 0)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen a Blaine County Explorer")
-        elseif vehicle == "Charger(ChangeMe)" then --change this to your charger spawn code
-            SetVehicleNumberPlateText(veh, "BCSO"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 1, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 1, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 111, 49)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen a Blaine County Charger")
-        end
-    end, coords, true)
-end)
-
-RegisterNetEvent('policegarage:sast')
-AddEventHandler('policegarage:sast', function(pd)
-    local vehicle = pd.vehicle
-    local coords = { ['x'] = 451.08, ['y'] = -975.77, ['z'] = 25.5, ['h'] = 90.07 } 
-    QBCore.Functions.SpawnVehicle(vehicle, function(veh)
-        if vehicle == "cvpi(ChangeMe)" then --change this to your cvpi spawn code
-            SetVehicleNumberPlateText(veh, "SAST"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 2, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 4, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 62, 62)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen a State CVPI")
-        elseif vehicle == "Explorer(ChangeMe)" then --change this to your explorer spawn code
-            SetVehicleNumberPlateText(veh, "SAST"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 0, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 4, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 62, 62)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen a State Explorer")
-        elseif vehicle == "Charger(ChangeMe)" then --change this to your charger spawn code
-            SetVehicleNumberPlateText(veh, "SAST"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0)
-            SetVehicleExtra(veh, 8, 0)
-            SetVehicleMod(veh, 1, 1, 1)
-            SetVehicleMod(veh, 8, 0, 1)
-            SetVehicleMod(veh, 9, 2, 1)
-            SetVehicleMod(veh, 48, 2, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 62, 62)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen a State charger")
-        else
-            SetVehicleNumberPlateText(veh, "INT"..tostring(math.random(1000, 9999)))
-            exports['lj-fuel']:SetFuel(veh, 100.0)
-            SetEntityHeading(veh, coords.h)
-            SetVehicleModKit(veh, 0)
-            SetVehicleExtra(veh, 1, 0)  
-            SetVehicleExtra(veh, 2, 0)
-            SetVehicleExtra(veh, 3, 0)
-            SetVehicleExtra(veh, 4, 0)
-            SetVehicleExtra(veh, 5, 0)
-            SetVehicleExtra(veh, 6, 0)
-            SetVehicleExtra(veh, 7, 0) 
-            SetVehicleExtra(veh, 8, 0) 
-            SetVehicleMod(veh, 1, 1, 1)
-            SetVehicleMod(veh, 8, 7, 1)
-            SetVehicleMod(veh, 6, 0, 1)
-            SetVehicleMod(veh, 9, 3, 1)
-            SetVehicleMod(veh, 48, 3, 1)
-            SetVehicleMod(veh, 32, 0, 1)
-            SetVehicleMod(veh, 37, 2, 1)
-            SetVehicleMod(veh, 17, 0, 1)
-            SetVehicleColours(veh, 0, 0)
-            SetVehicleDashboardColour(veh, 111)
-            SetVehicleWindowTint(veh, 3)
-            SetVehicleDirtLevel(veh, 0.0)
-            TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
-            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
-            QBCore.Functions.Notify("You have chosen an interceptor")
-        end
-    end, coords, true)
-end)
 
 RegisterNetEvent('policegarage:storecar')
 AddEventHandler('policegarage:storecar', function()
-local car = GetVehiclePedIsIn(PlayerPedId(),true)
-DeleteVehicle(car)
-DeleteEntity(car)
-if car == 0 then 
-    QBCore.Functions.Notify("You don't have a vehicle nearby")
-    else 
-        QBCore.Functions.Notify("You're Vehicle Has Been Stored")
+    local playerPed = PlayerPedId()
+    local vehicle = GetVehiclePedIsIn(playerPed, true)
+
+    if vehicle and vehicle ~= 0 then
+        local vehicleClass = GetVehicleClass(vehicle)
+        if vehicleClass == 18 then
+            DeleteVehicle(vehicle)
+            QBCore.Functions.Notify("Your Vehicle Has Been Stored")
+        else
+            QBCore.Functions.Notify("This is not a police vehicle")
+        end
+    else
+        QBCore.Functions.Notify("You don't have a vehicle nearby")
     end
 end)
 
-RegisterNetEvent('qb-menu:client:lspd', function(data)
-    local number = data.number
-    exports['qb-menu']:openMenu({
-        {
-            header = "< Go Back",
-            params = {
-                event =  "garage:policemenu"
-            }
-        },
-        {
-            header = "CVPI",
-            txt = "Police CVPI",
-            params = {
-                event = "policegarage:lspd",
-                args = {
-                    vehicle = 'cvpi(ChangeMe)', --change this to your cvpi spawn code
-                    
-                }
-            }
-        },
-        {
-            header = "Explorer",
-            txt = "Police Explorer",
-            params = {
-                event = "policegarage:lspd",
-                args = {
-                    vehicle = 'Explorer(ChangeMe)', --change this to your explorer spawn code
-                    
-                }
-            }
-        },
-        {
-        header = "Charger",
-        txt = "Police Charger",
-        params = {
-            event = "policegarage:lspd",
-            args = {
-                vehicle = 'Charger(ChangeMe)', --change this to your charger spawn code
-                
-            }
-        }
-    },
-    })
-end)
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)  -- Check each frame
 
-RegisterNetEvent('qb-menu:client:bcso', function(data)
-    local number = data.number
-    exports['qb-menu']:openMenu({
-        {
-            header = "< Go Back",
-            params = {
-                event =  "garage:policemenu"
+        if IsControlJustReleased(0, 289) then  -- 289 is the control ID for F2
+            local argsList = {
+                { Department = "BCSO", vehicle = Config.DepartmentVehicles.BCSO.CVPI },
+                { Department = "BCSO", vehicle = Config.DepartmentVehicles.BCSO.Explorer },
+                { Department = "BCSO", vehicle = Config.DepartmentVehicles.BCSO.Charger },
+                { Department = "INIT", vehicle = Config.DepartmentVehicles.INIT.Challanger },
+                { Department = "INIT", vehicle = Config.DepartmentVehicles.INIT.Mustang },
+                { Department = "INIT", vehicle = Config.DepartmentVehicles.INIT.Corvette },
+                { Department = "SAST", vehicle = Config.DepartmentVehicles.SAST.CVPI },
+                { Department = "SAST", vehicle = Config.DepartmentVehicles.SAST.Explorer },
+                { Department = "SAST", vehicle = Config.DepartmentVehicles.SAST.Charger },
+                { Department = "LSPD", vehicle = Config.DepartmentVehicles.LSPD.CVPI },
+                { Department = "LSPD", vehicle = Config.DepartmentVehicles.LSPD.Explorer },
+                { Department = "LSPD", vehicle = Config.DepartmentVehicles.LSPD.Charger }
             }
-        },
-        {
-            header = "CVPI",
-            txt = "Police CVPI",
-            params = {
-                event = "policegarage:bcso",
-                args = {
-                    vehicle = 'cvpi(ChangeMe)', --change this to your cvpi spawn code
-                    
-                }
-            }
-        },
-        {
-            header = "Explorer",
-            txt = "Police Explorer",
-            params = {
-                event = "policegarage:bcso",
-                args = {
-                    vehicle = 'Explorer(ChangeMe)', --change this to your explorer spawn code
-                    
-                }
-            }
-        },
-        {
-        header = "Charger",
-        txt = "Police Charger",
-        params = {
-            event = "policegarage:bcso",
-            args = {
-                vehicle = 'Charger(ChangeMe)', --change this to your charger spawn code
-                
-            }
-        }
-    },
-    })
-end)
 
-RegisterNetEvent('qb-menu:client:sast', function(data)
-    local number = data.number
-    exports['qb-menu']:openMenu({
-        {
-            header = "< Go Back",
-            params = {
-                event =  "garage:policemenu"
-            }
-        },
-        {
-            header = "CVPI",
-            txt = "Police CVPI",
-            params = {
-                event = "policegarage:sast",
-                args = {
-                    vehicle = 'cvpi(ChangeMe)', --change this to your cvpi spawn code
-                    
-                }
-            }
-        },
-        {
-            header = "Explorer",
-            txt = "Police Explorer",
-            params = {
-                event = "policegarage:sast",
-                args = {
-                    vehicle = 'Explorer(ChangeMe)', --change this to your explorer spawn code
-                    
-                }
-            }
-        },
-        {
-        header = "Charger",
-        txt = "Police Charger",
-        params = {
-            event = "policegarage:sast",
-            args = {
-                vehicle = 'Charger(ChangeMe)', --change this to your charger spawn code
-                
-            }
-        }
-    },
-    })
-end)
+            local randomIndex
+            repeat
+                randomIndex = math.random(#argsList)  -- Get a random index
+            until randomIndex ~= lastRandomIndex  -- Ensure it's not the same as the last one
 
-RegisterNetEvent('qb-menu:client:interceptor', function(data)
-    local number = data.number
-    exports['qb-menu']:openMenu({
-        {
-            header = "< Go Back",
-            params = {
-                event =  "garage:policemenu"
-            }
-        },
-        {
-            header = "Challanger(ChangeMe)langer",
-            txt = "Police Challanger(ChangeMe)langer",
-            params = {
-                event = "policegarage:sast",
-                args = {
-                    vehicle = 'Challanger(ChangeMe)',
-                    
-                }
-            }
-        },
-        {
-            header = "Mustang",
-            txt = "Police Mustang",
-            params = {
-                event = "policegarage:sast",
-                args = {
-                    vehicle = 'Mustang(ChangeMe)',
-                    
-                }
-            }
-        },
-        {
-            header = "Corvette",
-            txt = "Police Corvette",
-            params = {
-                event = "policegarage:sast",
-                args = {
-                    vehicle = 'corvette(ChangeMe)',
-                    
-                }
-            }
-        },
-    })
-end)
+            lastRandomIndex = randomIndex  -- Store the current index for the next iteration
+            local selectedArgs = argsList[randomIndex]  -- Select a random set of arguments
 
-RegisterNetEvent('garage:policemenu', function()
-    exports['qb-menu']:openMenu({
-        {
-            header = "Police Garage",
-            txt = ""
-        },
-        {
-            header = "LSPD",
-            txt = "LSPD Cruisers",
-            params = {
-                event = "qb-menu:client:lspd",
-                args = {
-                    number = 1,2,
-                    
-                }
-            }
-        },
-        {
-            header = "BCSO",
-            txt = "BCSO Cruisers",
-            params = {
-                event = "qb-menu:client:bcso",
-                args = {
-                    number = 1,2,
-                    
-                }
-            }
-        },
-        {
-            header = "SAST",
-            txt = "SAST Cruisers",
-            params = {
-                event = "qb-menu:client:sast",
-                args = {
-                    number = 1,2,
-                    
-                }
-            }
-        },
-        {
-            header = "Interceptors",
-            txt = "For Trained Officers Only",
-            params = {
-                event = "qb-menu:client:interceptor",
-                args = {
-                    number = 1,2,
-                    
-                }
-            }
-        },
-        {
-            header = "Store Vehicle",
-            txt = "Store Vehicle Inside Garage",
-            params = {
-                event = "policegarage:storecar",
-                args = {
-                    
-                }
-            }
-        },
-        {
-            header = "Close (esc)",
-            txt = "",
-            params = {
-                event = "qb-menu:closeMenu",
-                args = {
-                    
-                }
-            }
-        },
-        
-    })
+            TriggerEvent("policegarage:spawnVehicle", selectedArgs)
+        end
+    end
 end)
