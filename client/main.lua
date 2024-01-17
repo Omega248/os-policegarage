@@ -174,36 +174,3 @@ AddEventHandler('policegarage:storecar', function()
         QBCore.Functions.Notify("You don't have a vehicle nearby")
     end
 end)
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)  -- Check each frame
-
-        if IsControlJustReleased(0, 289) then  -- 289 is the control ID for F2
-            local argsList = {
-                { Department = "BCSO", vehicle = Config.DepartmentVehicles.BCSO.CVPI },
-                { Department = "BCSO", vehicle = Config.DepartmentVehicles.BCSO.Explorer },
-                { Department = "BCSO", vehicle = Config.DepartmentVehicles.BCSO.Charger },
-                { Department = "INIT", vehicle = Config.DepartmentVehicles.INIT.Challanger },
-                { Department = "INIT", vehicle = Config.DepartmentVehicles.INIT.Mustang },
-                { Department = "INIT", vehicle = Config.DepartmentVehicles.INIT.Corvette },
-                { Department = "SAST", vehicle = Config.DepartmentVehicles.SAST.CVPI },
-                { Department = "SAST", vehicle = Config.DepartmentVehicles.SAST.Explorer },
-                { Department = "SAST", vehicle = Config.DepartmentVehicles.SAST.Charger },
-                { Department = "LSPD", vehicle = Config.DepartmentVehicles.LSPD.CVPI },
-                { Department = "LSPD", vehicle = Config.DepartmentVehicles.LSPD.Explorer },
-                { Department = "LSPD", vehicle = Config.DepartmentVehicles.LSPD.Charger }
-            }
-
-            local randomIndex
-            repeat
-                randomIndex = math.random(#argsList)  -- Get a random index
-            until randomIndex ~= lastRandomIndex  -- Ensure it's not the same as the last one
-
-            lastRandomIndex = randomIndex  -- Store the current index for the next iteration
-            local selectedArgs = argsList[randomIndex]  -- Select a random set of arguments
-
-            TriggerEvent("policegarage:spawnVehicle", selectedArgs)
-        end
-    end
-end)
