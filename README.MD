@@ -1,95 +1,116 @@
-Just a simple Police garage for qbcore includes the ability to spawn the vehicles with the proper mods, extras and liveries
 
+# Police Garage for QBcore
 
-![image](https://user-images.githubusercontent.com/86800507/162882056-c555a49a-afdf-4594-9c2d-c24a5514be17.png)
-![image](https://user-images.githubusercontent.com/86800507/162882077-5d049856-6147-42dc-9e9d-0431c1f8ebef.png)
+This is a Police Garage script for QBcore, which enables the spawning of police vehicles with the proper mods, extras, and liveries, and includes rank/grade checks that can be enabled or disabled. It comes with a config.lua file, making everything as easy as possible to edit.
 
+## Installation
 
-NPC model is the Ped model more can be found here https://docs.fivem.net/docs/game-references/ped-models/ If you change the NPC model to a female Ped model make sure you change line 46 in main.lua from NPC = CreatePed(5, hash, coords, heading, false, false) to NPC = CreatePed(4, hash, coords, heading, false, false)
+1. Download the script files and place them in your server's resources folder.
 
-You will need to replace Model(ChangeMe) to your police car model in the main.lua
+2. In the `config.lua` file, replace the default vehicle models with the police car models you want to use.
 
-EXTRAS 
-for Extras change SetVehicleExtra(veh, 1, 0) 
-1 is the extra and 0 = true if you want to set the extra to false then change it to 1
+## Configuration
 
-MODS 
-for the mods SetVehicleMod(veh, 1, 2, 3) 
-    Veh = Vehicle You dont need to change this 
-        1 = ModType
+### Extras
 
-              Mod Types
-            VMT_SPOILER = 0,
-            VMT_BUMPER_F = 1,
-            VMT_BUMPER_R = 2,
-            VMT_SKIRT = 3,
-            VMT_EXHAUST = 4,
-            VMT_CHASSIS = 5,
-            VMT_GRILL = 6,
-            VMT_BONNET = 7,
-            VMT_WING_L = 8,
-            VMT_WING_R = 9,
-            VMT_ROOF = 10,
-            VMT_ENGINE = 11,
-            VMT_BRAKES = 12,
-            VMT_GEARBOX = 13,
-            VMT_HORN = 14,
-            VMT_SUSPENSION = 15,
-            VMT_ARMOUR = 16,
-            VMT_NITROUS = 17,
-            VMT_TURBO = 18,
-            VMT_SUBWOOFER = 19,
-            VMT_TYRE_SMOKE = 20,
-            VMT_HYDRAULICS = 21,
-            VMT_XENON_LIGHTS = 22,
-            VMT_WHEELS = 23,
-            VMT_WHEELS_REAR_OR_HYDRAULICS = 24,
-            VMT_PLTHOLDER = 25,
-            VMT_PLTVANITY = 26,
-            VMT_INTERIOR1 = 27,
-            VMT_INTERIOR2 = 28,
-            VMT_INTERIOR3 = 29,
-            VMT_INTERIOR4 = 30,
-            VMT_INTERIOR5 = 31,
-            VMT_SEATS = 32,
-            VMT_STEERING = 33,
-            VMT_KNOB = 34,
-            VMT_PLAQUE = 35,
-            VMT_ICE = 36,
-            VMT_TRUNK = 37,
-            VMT_HYDRO = 38,
-            VMT_ENGINEBAY1 = 39,
-            VMT_ENGINEBAY2 = 40,
-            VMT_ENGINEBAY3 = 41,
-            VMT_CHASSIS2 = 42,
-            VMT_CHASSIS3 = 43,
-            VMT_CHASSIS4 = 44,
-            VMT_CHASSIS5 = 45,
-            VMT_DOOR_L = 46,
-            VMT_DOOR_R = 47,
-            VMT_LIVERY_MOD = 48,
-            VMT_LIGHTBAR = 49,
+To configure extras for each police department's vehicles, use the following format in the `Config.DepartmentVehicles` section of the `config.lua` file:
 
-        2 = Mod 
+```lua
+extras = {
+    { id = 1, enabled = 0 }, // Extra 1 (enabled)
+    { id = 2, enabled = 1 }, // Extra 2 (disabled)
+    // Add more extras as needed
+}
+```
 
-            Stock = -1
-            1 = 0
-            2 = 1
-            and so on
+### Mods
 
-        3 = Custom Tires
+For vehicle mods, edit the mods section in the `config.lua` file. Use this format:
 
-            0 = true
-            1 = false
+```lua
+mods = {
+    { id = 0, modenabled = -1 }, // Spoiler, Stock
+    { id = 1, modenabled = 0 },  // Bumper_F, Level 1
+    // Add more mods as needed
+}
+```
 
-Colours
-    for Vehicle Colours change SetVehicleColours(veh, 111, 0)
+The `modenabled` field uses these values:
 
-        Veh = Vehicle
-        111 = Metallic White
-        0 = Metallic Black
-        More colour codes can be found here https://wiki.rage.mp/index.php?title=Vehicle_Colors
+- Stock: -1
+- Level 1: 0
+- Level 2: 1
+- and so on...
 
-To change where the car spawns change the X,Y,Z and H  at Local Coords
+### Mod Types
 
-Depending on the Fuel System you are using you might want to change "exports['lj-fuel']:SetFuel(veh, 100.0)" to "exports['LegacyFuel']:SetFuel(veh, 100.0)"
+Here are the available mod types along with their corresponding IDs:
+
+Mod Types
+- VMT_SPOILER = 0,
+-        VMT_BUMPER_F = 1,
+-        VMT_BUMPER_R = 2,
+-        VMT_SKIRT = 3,
+-        VMT_EXHAUST = 4,
+-        VMT_CHASSIS = 5,
+-        VMT_GRILL = 6,
+-        VMT_BONNET = 7,
+-        VMT_WING_L = 8,
+-        VMT_WING_R = 9,
+-        VMT_ROOF = 10,
+-        VMT_ENGINE = 11,
+-        VMT_BRAKES = 12,
+-        VMT_GEARBOX = 13,
+-        VMT_HORN = 14,
+-        VMT_SUSPENSION = 15,
+-        VMT_ARMOUR = 16,
+-        VMT_NITROUS = 17,
+-        VMT_TURBO = 18,
+-        VMT_SUBWOOFER = 19,
+-        VMT_TYRE_SMOKE = 20,
+-        VMT_HYDRAULICS = 21,
+-        VMT_XENON_LIGHTS = 22,
+-        VMT_WHEELS = 23,
+-        VMT_WHEELS_REAR_OR_HYDRAULICS = 24,
+-        VMT_PLTHOLDER = 25,
+-        VMT_PLTVANITY = 26,
+-        VMT_INTERIOR1 = 27,
+-        VMT_INTERIOR2 = 28,
+-        VMT_INTERIOR3 = 29,
+-        VMT_INTERIOR4 = 30,
+-        VMT_INTERIOR5 = 31,
+-        VMT_SEATS = 32,
+-        VMT_STEERING = 33,
+-        VMT_KNOB = 34,
+-        VMT_PLAQUE = 35,
+-        VMT_ICE = 36,
+-        VMT_TRUNK = 37,
+-        VMT_HYDRO = 38,
+-        VMT_ENGINEBAY1 = 39,
+-        VMT_ENGINEBAY2 = 40,
+-        VMT_ENGINEBAY3 = 41,
+-        VMT_CHASSIS2 = 42,
+-        VMT_CHASSIS3 = 43,
+-        VMT_CHASSIS4 = 44,
+-        VMT_CHASSIS5 = 45,
+-        VMT_DOOR_L = 46,
+-        VMT_DOOR_R = 47,
+-        VMT_LIVERY_MOD = 48,
+-        VMT_LIGHTBAR = 49,
+
+### Colors
+
+You can specify vehicle colors using color codes. For example, 111 represents Metallic White, and 0 represents Metallic Black. Find more color codes in the [Vehicle Colors Wiki](https://wiki.rage.mp/index.php?title=Vehicle_Colors).
+
+## Usage
+
+- Configure the `config.lua` file with your desired vehicle models, extras, mods, and colors.
+- Ensure that your server resources are correctly configured to include this script.
+- Use the garage to spawn police vehicles with the specified customizations.
+
+## Credits
+
+This Police Garage script was created by OmegaScripts.
+
+For any questions or issues, please contact me on [Discord](https://discord.gg/VBsUZXWRMj).
+
