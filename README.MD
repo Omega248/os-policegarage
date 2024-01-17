@@ -45,8 +45,7 @@ The `modenabled` field uses these values:
 ### Mod Types
 
 Here are the available mod types along with their corresponding IDs:
-
-### Mod Types
+```
 -        VMT_SPOILER = 0,
 -        VMT_BUMPER_F = 1,
 -        VMT_BUMPER_R = 2,
@@ -97,7 +96,7 @@ Here are the available mod types along with their corresponding IDs:
 -        VMT_DOOR_R = 47,
 -        VMT_LIVERY_MOD = 48,
 -        VMT_LIGHTBAR = 49,
-
+```
 ### Colors
 
 You can specify vehicle colors using color codes. For example, 111 represents Metallic White, and 0 represents Metallic Black. Find more color codes in the [Vehicle Colors Wiki](https://wiki.rage.mp/index.php?title=Vehicle_Colors).
