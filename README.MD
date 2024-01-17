@@ -46,8 +46,8 @@ The `modenabled` field uses these values:
 
 Here are the available mod types along with their corresponding IDs:
 
-Mod Types
-- VMT_SPOILER = 0,
+### Mod Types
+-        VMT_SPOILER = 0,
 -        VMT_BUMPER_F = 1,
 -        VMT_BUMPER_R = 2,
 -        VMT_SKIRT = 3,
