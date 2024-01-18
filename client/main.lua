@@ -43,7 +43,7 @@ function StartGarageLoop()
             while garageLoopActive do
                 local playerPed = PlayerPedId()
                 local pos = GetEntityCoords(playerPed)
-                local dist = #(vector3(459.6, -986.6, 24.7) - pos)
+                local dist = #(Config.NPClocation - pos)
 
                 if dist < 30 and not myPed then
                     myPed = CreateMyPed()
