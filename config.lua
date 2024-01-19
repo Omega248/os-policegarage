@@ -49,6 +49,19 @@ Config.VehSpawnLocations = {
 }
 
 -- ===================================================
+-- PERFORMANCE MODS CONFIGURATION
+-- ===================================================
+-- Enable max performance mods
+-- If set to true, maximum performance mods will be automatically applied to 
+-- the vehicle for the following mods IDs: 11, 12, 13, 15 
+-- In this case, you can leave these mods IDs out of the mods.id list 
+-- under Config.DepartmentVehicles.
+Config.Maxmods = true
+
+-- Enable turbo mod
+Config.Turbo = true
+
+-- ===================================================
 -- | DEPARTMENT VEHICLES CONFIGURATION               |
 -- ===================================================
 -- Configuration for each police department's vehicles.
