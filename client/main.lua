@@ -43,7 +43,7 @@ function StartGarageLoop()
             while garageLoopActive do
                 local playerPed = PlayerPedId()
                 local pos = GetEntityCoords(playerPed)
-               local npcLocation = vector3(Config.NPClocation.x, Config.NPClocation.y, Config.NPClocation.z)
+                local npcLocation = vector3(Config.NPClocation.x, Config.NPClocation.y, Config.NPClocation.z)
                 local dist = #(npcLocation - pos)
                 if dist < 30 and not myPed then
                     myPed = CreateMyPed()
@@ -133,8 +133,18 @@ AddEventHandler('policegarage:spawnVehicle', function(data)
             QBCore.Functions.Notify("Failed to spawn vehicle!", "error")
             return
         end
-
         SetVehicleModKit(veh, 0)
+        if Config.Maxmods then 
+            local performanceModIndices = { 11, 12, 13, 15}
+            for _, modType in ipairs(performanceModIndices) do
+                local maxModIndex = GetNumVehicleMods(veh, modType) - 1
+                SetVehicleMod(veh, modType, maxModIndex, false)
+            end
+            if Config.Turbo then
+            ToggleVehicleMod(veh, 18, true) 
+            else 
+            end
+        end
         for _, mod in ipairs(data.vehicle.mods) do
             SetVehicleMod(veh, mod.id, mod.modenabled, false)
         end
