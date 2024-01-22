@@ -3,7 +3,7 @@ game 'gta5'
 
 
 description 'os-policegarage'
-version '2.1.0'
+version '2.2.0'
 author 'Omega Scripts'
 
 
