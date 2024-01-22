@@ -3,14 +3,26 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local function addTargetZone(name, coords, heading)
     local policeJobsOptions = {}
 
-    for _, jobName in ipairs(Config.PoliceJobs) do
-        table.insert(policeJobsOptions, {
-            type = "client",
-            event = "garage:policemenu",
-            icon = "fa-solid fa-warehouse",
-            label = "Police Garage",
-            job = jobName
-        })
+    if type(Config.PoliceJobs) == "table" then
+        for _, jobName in ipairs(Config.PoliceJobs) do
+            table.insert(policeJobsOptions, {
+                type = "client",
+                event = "garage:policemenu",
+                icon = "fa-solid fa-warehouse",
+                label = "Police Garage",
+                job = jobName
+            })
+        end
+    elseif type(Config.PoliceJobs) == "string" then
+        policeJobsOptions = {
+            {
+                type = "client",
+                event = "garage:policemenu",
+                icon = "fa-solid fa-warehouse",
+                label = "Police Garage",
+                job = Config.PoliceJobs
+            }
+        }
     end
 
     exports['qb-target']:AddBoxZone(name, coords, 0.65, 0.75, {

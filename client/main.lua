@@ -30,8 +30,15 @@ end)
 
 function CheckAndStartGarageLoop()
     if PlayerData.job and PlayerData.job.name then
-        for _, policeJob in ipairs(Config.PoliceJobs) do
-            if PlayerData.job.name == policeJob then
+        if type(Config.PoliceJobs) == "table" then
+            for _, policeJob in ipairs(Config.PoliceJobs) do
+                if PlayerData.job.name == policeJob then
+                    StartGarageLoop()
+                    return
+                end
+            end
+        elseif type(Config.PoliceJobs) == "string" then
+            if PlayerData.job.name == Config.PoliceJobs then
                 StartGarageLoop()
                 return
             end
@@ -210,7 +217,6 @@ RegisterNetEvent('policegarage:storecar')
 AddEventHandler('policegarage:storecar', function()
     local playerPed = PlayerPedId()
     local vehicle = GetVehiclePedIsIn(playerPed, true)
-
     if vehicle and vehicle ~= 0 then
         local vehicleClass = GetVehicleClass(vehicle)
         if vehicleClass == 18 then
