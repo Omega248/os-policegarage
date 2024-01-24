@@ -1,12 +1,10 @@
 local function CheckVersion()
     PerformHttpRequest('https://raw.githubusercontent.com/Omega248/os-policegarage/main/version', function(err, newestVersion, headers)
-        -- Check if there is an error in the HTTP request
         if err ~= 200 then
             print("HTTP Request Error. Error code: " .. tostring(err))
             return
         end
 
-        -- Check if the newest version information is available
         if newestVersion == nil or newestVersion == "" then
             print("Failed to retrieve the latest version. The response was empty.")
             return
