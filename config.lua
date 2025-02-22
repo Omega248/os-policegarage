@@ -162,6 +162,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} }, --Name = item spawn code, Amount = quantity, Info = optional.
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         CVPI = {
@@ -183,6 +189,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         Explorer = {
@@ -204,6 +216,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         -- Additional LSPD vehicles...
@@ -228,6 +246,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         CVPI = {
@@ -249,6 +273,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} }, --Name = item spawn code, Amount = quantity, Info = optional.
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         Explorer = {
@@ -270,6 +300,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         -- Additional BCSO vehicles...
@@ -294,6 +330,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         CVPI = {
@@ -315,6 +357,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         Explorer = {
@@ -336,6 +384,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         -- Additional SAST vehicles...
@@ -360,6 +414,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         Corvette = {
@@ -381,6 +441,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         Challenger = {
@@ -402,6 +468,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
         -- Additional INIT vehicles...
@@ -426,6 +498,12 @@ Config.DepartmentVehicles = {
                 { id = 6, enabled = 0 },
                 { id = 7, enabled = 0 },
                 { id = 8, enabled = 0 }
+            },
+            trunkItems = {
+                [1] = { name = "armor", amount = 5, info = {} },
+                [2] = { name = "firstaid", amount = 3, info = {} },
+                [3] = { name = "weapon_stungun", amount = 1, info = {} },
+                [4] = { name = "handcuffs", amount = 2, info = {} }
             }
         },
 
