@@ -1,6 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
--- Create a department menu, filtering out vehicles the player isn’t allowed to drive
 function CreateDepartmentMenu(departmentName, departmentVehicles)
     local menuItems = {
         {
@@ -9,7 +8,6 @@ function CreateDepartmentMenu(departmentName, departmentVehicles)
         }
     }
 
-    -- Get updated player data here
     local playerData = QBCore.Functions.GetPlayerData()
     local playerJob = (playerData and playerData.job and playerData.job.name) or nil
     local playerRank = (playerData and playerData.job and (playerData.job.grade.level or playerData.job.grade)) or 0
@@ -58,9 +56,8 @@ RegisterNetEvent('garage:policemenu', function()
 
     for _, departmentName in ipairs(departmentNames) do
         local departmentVehicles = Config.DepartmentVehicles[departmentName]
-        -- Build the department menu to check if any vehicles are allowed
         local departmentMenu = CreateDepartmentMenu(departmentName, departmentVehicles)
-        if #departmentMenu > 1 then  -- More than just the "< Go Back" option
+        if #departmentMenu > 1 then 
             table.insert(mainMenuItems, {
                 header = departmentName,
                 params = {
